@@ -44,6 +44,20 @@ router.post('/usuario', async (req, res) => {
     }
 });
 
+router.post('/login', async (req, res) => {
+    const { correo } = req.body;
+    try {
+        const result = await pool.query(
+            'SELECT verificarCorreo($1)',
+            [correo]
+        );
+        res.status(200).json(result.rows[0]);
+        console.info('Correo verificado');
+    } catch (err) {
+        console.error('Error en el servidor', err);
+        res.status(500).send('Error en el servidor');
+    }
+});
 
 
 module.exports = router;
